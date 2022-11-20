@@ -38,6 +38,7 @@ export class El {
       if (name.startsWith('!')) {
         name = name.slice(1); bool = false;
       }
+      el.removeAttribute('@if');
       if (!!(this.methods[name]()) !== bool) el.parentNode.removeChild(el);
     }
   }
