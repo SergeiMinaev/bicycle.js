@@ -68,7 +68,7 @@ export class El {
     if (el.attributes['@click']) {
       const methodname = el.attributes['@click'].value;
       el.addEventListener('click', (ev) => {
-        this.methods[methodname](el);
+        this.methods[methodname](ev);
         ev.stopImmediatePropagation();
       });
     }
