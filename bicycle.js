@@ -52,6 +52,7 @@ export class El {
       const val = el.attributes['@for'].value;
       const [itemName, _, srcName] = val.split(' ');
       const src = window.state[srcName.split('state.')[1]];
+      if (!src) return;
       // iter backwards because we're using insertBefore
       for (let index = src.length - 1; index >= 0; index--) {
         const item = src[index];
