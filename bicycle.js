@@ -187,7 +187,9 @@ export const observable = (target, callback, _base = []) => {
 export function mutStateCallback(keys, val) {
   const changedPath = keys.join('.');
   Object.keys(window._callbacks).forEach(watchedPath => {
-    if (watchedPath.startsWith(changedPath) || changedPath.startsWith(watchedPath)) {
+    if (watchedPath == changedPath
+        || (watchedPath+'.').startsWith(changedPath+'.')
+        || (changedPath+'.').startsWith(watchedPath+'.')) {
       window._callbacks[watchedPath].forEach( (cbk, idx) => cbk.fn() );
     }
   });
