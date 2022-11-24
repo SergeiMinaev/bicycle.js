@@ -86,7 +86,7 @@ export class El {
           const v = resolve(name, window);
           el.innerHTML = v;
         } else {
-          el.innerHTML = this.context[name];
+          el.innerHTML = resolve(name, this.context);
         }
       }
     }
