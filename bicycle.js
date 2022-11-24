@@ -117,6 +117,7 @@ export class El {
     onHistoryChange: (ev) => this.router.renderRouterView(),
     renderRouterView: () => {
       const routerNode = document.getElementById('router-view');
+      if (!routerNode) return;
       const route = window.routes.find(
         (route) => route.url == document.location.pathname.replace(/\/$/, '')
       );
