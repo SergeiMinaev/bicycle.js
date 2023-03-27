@@ -117,8 +117,11 @@ export class El {
     onHistoryBtnClick: (ev) => this.router.renderRouterView(),
     onHistoryChange: (ev) => this.router.renderRouterView(),
     renderRouterView: () => {
-      const routerNode = document.getElementById('router-view');
-      if (!routerNode) return;
+      const _routerNode = document.getElementById('router-view');
+      if (!_routerNode) return;
+      const routerNode = document.createElement('div');
+      routerNode.id = 'router-view';
+      _routerNode.replaceWith(routerNode);
       const route = window.routes.find(
         (route) => route.url == document.location.pathname.replace(/\/$/, '')
       );
@@ -199,7 +202,7 @@ export function mutStateCallback(keys, val) {
 
 export function cleanupCallbacks() {
   Object.keys(window._callbacks).forEach(path => {
-    for (let i = 0; i < window._callbacks[path].length; i++){
+    for (let i = 0; i < window._callbacks[path].length; i++) {
       if (!window._callbacks[path][i].c.rootNode.isConnected) {
         window._callbacks[path].splice(i, 1);
         i--;
