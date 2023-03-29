@@ -82,7 +82,10 @@ export class El {
       if (isMethod) {
         el.innerHTML = this.strings[name]();
       } else {
-        if (name.startsWith('state.')) {
+        if (name.startsWith('data.')) {
+          const v = resolve(name, this);
+          el.innerHTML = v;
+        } else if (name.startsWith('state.')) {
           const v = resolve(name, window);
           el.innerHTML = v;
         } else {
