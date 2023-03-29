@@ -62,7 +62,7 @@ export class El {
         this.processTpl(elClone);
       };
       el.parentNode.removeChild(el);
-      this.context[itemName] = undefined;
+      //this.context[itemName] = undefined;
     }
   }
   handleClicks(el) {
@@ -94,7 +94,10 @@ export class El {
   router = {
     handleRoutes: (el) => {
       if (el.attributes['@to']) {
-        const url = el.attributes['@to'].value;
+        let url = el.attributes['@to'].value;
+        if (url.includes('${')) {
+          url = interpolate(url, this.context);
+        }
         el.addEventListener('click', (event) => {
           window.history.pushState({}, '', url);
           event.stopImmediatePropagation();
@@ -209,4 +212,12 @@ export function cleanupCallbacks() {
       }
     }
   });
+}
+
+// Emulate template string
+function interpolate(s, obj) {
+  return s.replace(/[$]{([^}]+)}/g, function(_, path) {
+    const properties = path.split('.');
+    return properties.reduce((prev, curr) => prev && prev[curr], obj);
+  })
 }
