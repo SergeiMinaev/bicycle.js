@@ -125,8 +125,21 @@ export class El {
       const routerNode = document.createElement('div');
       routerNode.id = 'router-view';
       _routerNode.replaceWith(routerNode);
+      window.$route = undefined;
       const route = window.routes.find(
-        (route) => route.url == document.location.pathname.replace(/\/$/, '')
+        (route) => {
+          const routeMatcher = new RegExp(route.url.replace(/:[^\s/]+/g, '([\\w-]+)'));
+          const url = document.location.pathname.replace(/\/$/, '');
+          const match = url.match(routeMatcher);
+          if (match) {
+            // Current route params are available at window.$route
+            window.$route = {
+              path: url,
+              params: match.splice(1),
+            };
+            return route;
+          }
+        }
       );
       if (route) {
         const comp = new route.c(routerNode);
