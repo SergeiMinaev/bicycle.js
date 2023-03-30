@@ -29,6 +29,7 @@ export class El {
     this.handleComponents(el);
     this.handleVars(el);
     this.handleClicks(el);
+    this.handleAdvanced(el);
     this.router.handleRoutes(el);
   }
   handleIfs(el) {
@@ -79,18 +80,29 @@ export class El {
       let name = el.innerHTML.replace('{{','').replace('}}','');
       const isMethod = name.includes('()');
       name = name.replace('()','').trim();
-      if (isMethod) {
-        el.innerHTML = this.strings[name]();
+      el.innerHTML = this.getVal(name);
+    }
+  }
+  handleAdvanced(el) {
+    if (!el.attributes['@value']) return;
+    el.value = this.handleAttr(el, '@value');
+  }
+  handleAttr(el, attr) {
+    if (!el.attributes[attr]) return;
+    let name = el.attributes[attr].value;
+    return this.getVal(name);
+  }
+  getVal(name) {
+    const isMethod = name.includes('()');
+    if (isMethod) {
+      el.innerHTML = this.strings[name]();
+    } else {
+      if (name.startsWith('data.')) {
+        return resolve(name, this);
+      } else if (name.startsWith('state.')) {
+        return resolve(name, window);
       } else {
-        if (name.startsWith('data.')) {
-          const v = resolve(name, this);
-          el.innerHTML = v;
-        } else if (name.startsWith('state.')) {
-          const v = resolve(name, window);
-          el.innerHTML = v;
-        } else {
-          el.innerHTML = resolve(name, this.context);
-        }
+        return resolve(name, this.context);
       }
     }
   }
