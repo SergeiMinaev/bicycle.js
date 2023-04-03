@@ -1,4 +1,6 @@
 window._callbacks = {};
+window._comps = [];
+
 
 export class El {
   constructor(rootNode, tplId) {
@@ -6,7 +8,17 @@ export class El {
     this.tplId = tplId;
     this.context = {};
   }
+  cleanup() {
+    window._comps.forEach((el, idx) => {
+      if (!el.rootNode.isConnected) {
+        if (el.destroyed) el.destroyed();
+        window._comps.splice(idx, 1);
+      }
+    });
+  }
   mount() {
+    this.cleanup();
+    window._comps.push(this);
     if (this.created) this.created();
     this.render();
   }
