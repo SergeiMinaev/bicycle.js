@@ -141,8 +141,9 @@ export class El {
       routerNode.id = 'router-view';
       _routerNode.replaceWith(routerNode);
       window.$route = undefined;
-      const route = window.routes.find(
+      const [_, route] = Object.entries(window.routes).find(
         (route) => {
+          route = route[1];
           const routeMatcher = new RegExp(route.url.replace(/:[^\s/]+/g, '([\\w-]+)'));
           const url = document.location.pathname.replace(/\/$/, '');
           const match = url.match(routeMatcher);
@@ -251,7 +252,11 @@ function interpolate(s, obj) {
 }
 
 window.$router = {
-  push(url) {
-    window.history.pushState({}, '', url);
+  push(route) {
+    if (typeof(route) == "object") {
+      window.history.pushState({}, '', route.url);
+    } else {
+      window.history.pushState({}, '', route);
+    }
   }
 }
