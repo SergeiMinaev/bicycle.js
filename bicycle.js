@@ -249,3 +249,9 @@ function interpolate(s, obj) {
     return properties.reduce((prev, curr) => prev && prev[curr], obj);
   })
 }
+
+window.$router = {
+  push(url) {
+    window.history.pushState({}, '', url);
+  }
+}
